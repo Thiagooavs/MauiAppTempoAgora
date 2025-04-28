@@ -62,6 +62,73 @@ namespace MauiAppTempoAgora
 
         }
 
+        private async void Button_Clicked_Localizacao(object sender, EventArgs e)
+        {
+            try
+            {
+                GeolocationRequest request = new GeolocationRequest(
+                    GeolocationAccuracy.Medium,
+                    TimeSpan.FromSeconds(10)
+                    );
+
+
+                Location? local = await Geolocation.Default.GetLocationAsync(request);
+
+                if (local != null)
+                {
+                    string local_disp = $"Latitde: {local.Latitude} \n" +
+                                        $"Longitude: {local.Longitude} \n";
+
+                    lbl_coords.Text = local_disp;
+
+                    //pega nome da cidade que está nas coordenadas.
+                    GetCidade(local.Latitude, local.Longitude);
+
+                }
+                else
+                {
+                    lbl_coords.Text = "Nenhuma localização";
+                }
+            }
+            catch (FeatureNotSupportedException fnsEx)
+            {
+                await DisplayAlert("Erro: dispositivo não Suporta", fnsEx.Message, "ok");
+
+
+            }
+            catch (FeatureNotEnabledException fneEX)
+            {
+                await DisplayAlert("Error: Localização Desabilitada", fneEX.Message, "ok");
+            }
+            catch (PermissionException pEx)
+            {
+                await DisplayAlert("Error: Permissão da Localização", pEx.Message, "ok");
+            }
+            catch(Exception ex)
+            {
+                await DisplayAlert("Erro", ex.Message, "ok");
+            }
+        }
+
+        private async void GetCidade(double latitude, double longitude)
+        {
+            try
+            {
+
+                IEnumerable<Placemark> places = await Geocoding.Default.GetPlacemarksAsync(latitude, longitude);
+
+                Placemark? place = places.FirstOrDefault();
+
+                if (place != null)
+                {
+                    txt_cidade.Text = place.Locality;
+                }
+            }catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "ok");
+            }
+        }
+
 
 
     }
