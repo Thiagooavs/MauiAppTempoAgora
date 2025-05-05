@@ -1,11 +1,11 @@
-﻿using System.Diagnostics;
+﻿using MauiAppTempoAgora.Models;
+using System.Diagnostics;
 using MauiAppTempoAgora.Services;
 
 namespace MauiAppTempoAgora
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
 
         public MainPage()
         {
@@ -33,7 +33,7 @@ namespace MauiAppTempoAgora
                         lbl_res.Text = dados_previsao;
 
                         string mapa = $"https://embed.windy.com/embed.html?" +
-                            $"type=map&Location=coordinates&metricRain=mm&metricTemp=°C" +
+                            $"type=map&location=coordinates&metricRain=mm&metricTemp=°C" +
                             $"&metricWind=km/h&zoom=5&overlay=wind&product=ecmwf&level=surface" +
                             $"&lat={t.lat.ToString().Replace(",", ".")}&lon={t.lon.ToString().Replace(",", ".")}";
 
@@ -50,7 +50,7 @@ namespace MauiAppTempoAgora
                 }
                 else
                 {
-                    lbl_Text = "Preencha a cidade.";
+                    lbl_res.Text = "Preencha a cidade.";
                 }
 
             }
